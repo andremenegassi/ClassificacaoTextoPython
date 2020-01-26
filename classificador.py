@@ -1,15 +1,24 @@
 import nltk
 
 #****remova os comentários caso não tenha os pacotes a seguir instalados.***
-nltk.download('punkt') 
-nltk.download('rslp') #funções para tratamento de texto em português.
-nltk.download("stopwords") #importar a relação de stopwords.
+#nltk.download('punkt') 
+#nltk.download('rslp') #funções para tratamento de texto em português.
+#nltk.download("stopwords") #importar a relação de stopwords.
 
 from nltk.stem import RSLPStemmer #para radicalizar (achar sua base) as palavras
 
 #inteções para treino e suas respostas respostas.
 #Em uma aplicação real, isso deve ser extraído de uma base de dados.
 dados_treino = []
+
+
+intencao0 = {"classe":"saudacao", 
+             "intencoes": [
+                    "Oi",
+                    "Olá",
+                    "Tudo bem?"],
+             "resposta":"Oi. Que legal, vamos conversar."}
+
     
 intencao1 = {"classe":"cursar", 
              "intencoes": [
@@ -33,6 +42,7 @@ intencao3 = {"classe":"python",
                     "Python é complicado?",], 
              "resposta":"Python é estranho, mas é fácil."}             
     
+dados_treino.append(intencao0)
 dados_treino.append(intencao1)
 dados_treino.append(intencao2)
 dados_treino.append(intencao3)
@@ -93,13 +103,17 @@ def Treinar():
             intencao = Stemming(intencao)
             intencao = RemoveStopwords(intencao)
 
-            if (classe not in list(modelo.keys())):
-                modelo[classe] = {}
 
+            if (classe not in list(modelo.keys())):
+                #obtendo a frequência das palavras
+                modelo[classe] = dict(nltk.probability.FreqDist(intencao))
+
+            '''
             for palavra in intencao:
                 if (palavra not in list(modelo[classe].keys())):
                     modelo[classe][palavra] = 1
                 else: modelo[classe][palavra] += 1
+            '''
 
     return modelo
 
@@ -148,25 +162,16 @@ def Responder(usuarioIntencao):
 
         #localizando a classe com maior pontuação
         classeMaior = max(classificacao, key=classificacao.get)
+ 
+        #obtendo a resposta associada a classe com maior pontuação
+        intencao = [i for i in dados_treino if i["classe"] == classeMaior]
+        resposta = intencao[0]["resposta"]
+        print(resposta)
 
-        #threshold/limiar para mostrar a resposta.
-        if (classificacao[classeMaior]) <= 2:
-            print(":-( Não entendi sua pergunta. Me passe mais detalhes.")
-        else:
-            #obtendo a resposta associada a classe com maior pontuação
-            intencao = [i for i in dados_treino if i["classe"] == classeMaior]
-            resposta = intencao[0]["resposta"]
-            print(resposta)
-
-
+ 
 usuarioIntencao = ""
 while (True):
     usuarioIntencao = input("pergunta: ")
     if (usuarioIntencao.lower() != "sair"):
         Responder(usuarioIntencao)
     else: break
-    
-
-
-
-
