@@ -20,3 +20,6 @@ O classificador está preparado para as intenções a seguir:
  - Python é difícil?
 
  - Python é complicado?
+
+
+<a target="blank" href="https://repl.it/@AndrMenegassi/ClassificacaoTextoPython">Demonstração (https://repl.it/@AndrMenegassi/ClassificacaoTextoPython)</a>
