@@ -1,9 +1,9 @@
 import nltk
 
 #****remova os comentários caso não tenha os pacotes a seguir instalados.***
-#nltk.download('punkt') 
-#nltk.download('rslp') #funções para tratamento de texto em português.
-#nltk.download("stopwords") #importar a relação de stopwords.
+nltk.download('punkt') 
+nltk.download('rslp') #funções para tratamento de texto em português.
+nltk.download("stopwords") #importar a relação de stopwords.
 
 from nltk.stem import RSLPStemmer #para radicalizar (achar sua base) as palavras
 
