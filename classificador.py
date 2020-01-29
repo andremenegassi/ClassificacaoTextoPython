@@ -48,6 +48,8 @@ dados_treino.append(intencao2)
 dados_treino.append(intencao3)
 
 
+
+
 #Quebrar uma sentenca em um vetor de palavras
 def Tokenize(sentenca):
     sentenca = sentenca.lower()
@@ -98,22 +100,18 @@ def Treinar():
         classe = dado["classe"] 
         intencoes = dado["intencoes"]
 
+        palavras = []
+
         for intencao in intencoes:
             intencao = Tokenize(intencao)
             intencao = Stemming(intencao)
             intencao = RemoveStopwords(intencao)
 
-
-            if (classe not in list(modelo.keys())):
-                #obtendo a frequência das palavras
-                modelo[classe] = dict(nltk.probability.FreqDist(intencao))
-
-            '''
-            for palavra in intencao:
-                if (palavra not in list(modelo[classe].keys())):
-                    modelo[classe][palavra] = 1
-                else: modelo[classe][palavra] += 1
-            '''
+            palavras += intencao
+            
+        
+        #obtendo a frequência das palavras
+        modelo[classe] = dict(nltk.probability.FreqDist(palavras))
 
     return modelo
 
@@ -129,8 +127,6 @@ def Cacular_Pontuacao(usuarioIntencao):
         }
     '''
 
-    # o modelo pode ser importado, para não ter que treinar sempre.
-    modelo = Treinar()
 
     usuarioIntencao = Tokenize(usuarioIntencao)
     usuarioIntencao = Stemming(usuarioIntencao)
@@ -168,6 +164,11 @@ def Responder(usuarioIntencao):
         resposta = intencao[0]["resposta"]
         print(resposta)
 
+ 
+
+
+# o modelo pode ser importado, para não ter que treinar sempre.
+modelo = Treinar()
  
 usuarioIntencao = ""
 while (True):
